@@ -1,7 +1,7 @@
 #1.5.4
--1. Program akan masuk ke dalam blok if ketika nilai variabel timeDelay kurang dari atau sama dengan 100 (timeDelay <= 100)
--2. Program akan masuk ke blok else apabila timeDelay lebih dari 100
--3. Perintah ini berfungsi untuk memberikan jeda pada program. Semakin tinggi angka pada variabel timeDelay, maka jeda waktunya akan semakin lambat.
+- 1. Program akan masuk ke dalam blok if ketika nilai variabel timeDelay kurang dari atau sama dengan 100 (timeDelay <= 100)
+- 2. Program akan masuk ke blok else apabila timeDelay lebih dari 100
+- 3. Perintah ini berfungsi untuk memberikan jeda pada program. Semakin tinggi angka pada variabel timeDelay, maka jeda waktunya akan semakin lambat.
 ```C++
 const int ledPin = 6;
 int timeDelay = 1000;
