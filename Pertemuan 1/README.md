@@ -38,11 +38,13 @@ void loop() {
     digitalWrite(ledPin, LOW);
     delay(timeDelay);
     fase = 2; // Pindah ke fase mati
-  } ```
+  } 
   else if (fase == 2) {
     // Fase Mati (Reset ke awal setelah jeda)
     delay(3000); 
     timeDelay = 1000; // Reset ke nilai awal
     fase = 0; // Mulai siklus lagi
   }
-}
+}```
+
+https://media1.tenor.com/m/K8A8OIcNpQEAAAAd/grandma-grandma-sad.gif
