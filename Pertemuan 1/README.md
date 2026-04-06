@@ -46,5 +46,3 @@ void loop() {
     fase = 0; // Mulai siklus lagi
   }
 }```
-
-https://media1.tenor.com/m/K8A8OIcNpQEAAAAd/grandma-grandma-sad.gif
