@@ -1,4 +1,4 @@
-##1.5.4
+## 1.5.4
 1. Pada kondisi apa program masuk ke blok if?
 2. Pada kondisi apa program masuk ke blok else?
 3. Apa fungsi dari perintah delay(timeDelay)?
@@ -47,9 +47,10 @@ void loop() {
     fase = 0; // Mulai siklus lagi
   }
 }
-![tenor](https://github.com/user-attachments/assets/3f8bb440-a0e2-476f-8d4a-419415bb5095)
 ```
-###1.6.4
+![tenor](https://github.com/user-attachments/assets/5750a4b7-9866-46fb-aaaf-692091ef8d8d)
+
+## 1.6.4
 1. Gambarkan rangkaian schematic 5 LED running yang digunakan pada percobaan!
 2. Jelaskan bagaimana program membuat efek LED berjalan dari kiri ke kanan!
 3. Jelaskan bagaimana program membuat LED kembali dari kanan ke kiri!
@@ -60,7 +61,7 @@ void loop() {
 3. Program menggunakan perulangan for yang dibalik (decrement), yaitu dari pin tinggi ke rendah dengan sintaks for (int ledPin = 7; ledPin >= 2; ledPin--). Secara berurutan, program menghidupkan pin , menundanya , dan mematikan pin tersebut  sehingga tercipta efek menyala mundur.
 4. 
 
-##1.7
+## 1.7
 1. Uraikan hasil tugas pada praktikum yang telah dilakukan pada setiap percobaan!
 2. Bagaimana pengaruh penggunaan struktur perulangan (seperti for dan while) terhadap jalannya program pada Arduino?
 3. Bagaimana cara kerja percabangan (if-else) dalam menentukan kondisi LED menyala atau mati berdasarkan input yang diberikan?
