@@ -3,9 +3,10 @@
 2. Pada kondisi apa program masuk ke blok else?
 3. Apa fungsi dari perintah delay(timeDelay)?
 4. Jika program yang dibuat memiliki alur mati → lambat → cepat → reset (mati), ubah menjadi LED tidak langsung reset → tetapi berubah dari cepat → sedang → mati dan berikan penjelasan disetiap baris kode
-- 1 Program akan masuk ke dalam blok if ketika nilai variabel timeDelay kurang dari atau sama dengan 100 (timeDelay <= 100)
-- 2 Program akan masuk ke blok else apabila timeDelay lebih dari 100
-- 3 Perintah ini berfungsi untuk memberikan jeda pada program. Semakin tinggi angka pada variabel timeDelay, maka jeda waktunya akan semakin lambat.
+---
+1 Program akan masuk ke dalam blok if ketika nilai variabel timeDelay kurang dari atau sama dengan 100 (timeDelay <= 100)
+2 Program akan masuk ke blok else apabila timeDelay lebih dari 100
+3 Perintah ini berfungsi untuk memberikan jeda pada program. Semakin tinggi angka pada variabel timeDelay, maka jeda waktunya akan semakin lambat.
 ```C++
 const int ledPin = 6;
 int timeDelay = 1000;
