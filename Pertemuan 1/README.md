@@ -59,11 +59,11 @@ void loop() {
 4. Buatkan program agar LED menyala tiga LED kanan dan tiga LED kiri secara bergantian dan berikan penjelasan disetiap baris kode
 ```C
 int timer = 500;        // Catatan waktu jeda pergantian lampu (500 milidetik / setengah detik)
-unsigned int phase = 0; // Penanda tugas: 0 (kelompok kiri nyala), 1 (kelompok kanan nyala)
+int phase = 0; // Penanda tugas: 0 (kelompok kiri nyala), 1 (kelompok kanan nyala)
 
 void setup() {
   // Bagian persiapan, dijalankan sekali
-  // Pakai perulangan (looping) biar nggak capek nulis pinMode satu-satu untuk pin 2 sampai 7
+  // Pakai perulangan (looping) biar nulis pinMode satu-satu untuk pin 2 sampai 7
   for (int ledPin = 2; ledPin < 8; ledPin++) {
     pinMode(ledPin, OUTPUT); // Jadikan pin-pin tersebut sebagai tempat keluar listrik
   }
@@ -71,8 +71,7 @@ void setup() {
 
 void loop() {
   // Bagian utama, dijalankan terus-menerus
-  
-  // Penjaga gawang: Pastikan nilai phase cuma bolak-balik di angka 0 dan 1.
+  // memastikan nilai phase cuma bolak-balik di angka 0 dan 1.
   // Kalau phase-nya 2, otomatis dikembalikan jadi 0 (sisa bagi dari 2 dibagi 2)
   phase = phase % 2; 
 
@@ -97,10 +96,10 @@ void loop() {
     }
   }
 
-  // Tunggu sebentar biar mata kita bisa lihat pergantian nyalanya
+  //delay pergantian antar lampu
   delay(timer); 
 
-  // Lanjut ke fase berikutnya biar tugasnya bergantian di putaran selanjutnya
+  // Lanjut ke fase berikutnya
   phase++; 
 }
 ```
