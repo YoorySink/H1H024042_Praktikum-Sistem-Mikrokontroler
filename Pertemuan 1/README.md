@@ -9,52 +9,52 @@
 3. Perintah ini berfungsi untuk memberikan jeda pada program. Semakin tinggi angka pada variabel timeDelay, maka jeda waktunya akan semakin lambat.
 
 ```C++
-const int ledPin = 6;
-int timeDelay = 1000;
-int fase = 0; // 0 = Makin Cepat, 1 = Sedang, 2 = Mati
+const int ledPin = 6; // Nomor pin LED yang dipakai
+int timeDelay = 1000; // Variabel penampung waktu delay (kecepatan awal)
+unsigned int phase = 0; // Variabel penampung fase (0 = lambat -> cepat, 1 = cepat -> sedang -> mati/reset)
 
-void setup() {
-  pinMode(ledPin, OUTPUT);
+void setup() { 
+    // Fungsi yang akan dijalankan sekali saat Arduino menyala
+    pinMode(ledPin, OUTPUT); // Menginisiasi pin LED sebagai output
 }
 
-void loop() {
-  if (fase == 0) {
-    // Nyalakan LED (Fase Lambat -> Cepat)
-    digitalWrite(ledPin, HIGH);
-    delay(timeDelay);
-    digitalWrite(ledPin, LOW);
-    delay(timeDelay);
+void loop() { 
+    // Fungsi yang akan dijalankan terus-menerus oleh Arduino
+    digitalWrite(ledPin, HIGH); // Menyalakan LED
+    delay(timeDelay); // Jeda, menentukan berapa lama LED menyala
 
-    if (timeDelay <= 100) {
-      fase = 1; // Pindah ke fase sedang
-    } else {
-      timeDelay -= 100; // Percepatan bertahap
+    digitalWrite(ledPin, LOW); // Mematikan LED
+    delay(timeDelay); // Jeda, menentukan berapa lama LED mati
+
+    // Percabangan untuk mengatur fase dan waktu delay
+    if (timeDelay <= 100 && phase == 0) { 
+        // Mengecek apakah timeDelay sudah maksimal cepat (<= 100) dan sedang di fase 0
+        phase = 1; // Mengubah ke fase kebalikannya (melambat menuju mati)
+    } 
+    else if (timeDelay > 1000 && phase == 1) { 
+        // Mengecek apakah timeDelay sudah melambat melebihi 1000 dan sedang di fase 1
+        delay(3000); // Memberikan jeda mati selama 3 detik sebelum siklus baru (reset)
+        timeDelay = 1000; // Mengembalikan nilai timeDelay ke 1000 (lambat)
+        phase = 0; // Mengembalikan nilai phase ke 0 (memulai siklus percepatan lagi)
+    } 
+    else { 
+        // Jika kedua kondisi batas di atas belum terpenuhi, atur perubahan kecepatannya
+        if (phase == 0) {
+            timeDelay -= 100; // Jika sedang di fase 0, kurangi jeda waktu agar makin cepat
+        } else {
+            timeDelay += 200; // Jika di fase 1, tambah jeda waktu agar makin lambat
+        }
     }
-  } 
-  else if (fase == 1) {
-    // Fase Sedang
-    timeDelay = 500;
-    digitalWrite(ledPin, HIGH);
-    delay(timeDelay);
-    digitalWrite(ledPin, LOW);
-    delay(timeDelay);
-    fase = 2; // Pindah ke fase mati
-  } 
-  else if (fase == 2) {
-    // Fase Mati (Reset ke awal setelah jeda)
-    delay(3000); 
-    timeDelay = 1000; // Reset ke nilai awal
-    fase = 0; // Mulai siklus lagi
-  }
 }
 ```
-![tenor](https://github.com/user-attachments/assets/5750a4b7-9866-46fb-aaaf-692091ef8d8d)
 
 ## 1.6.4
 1. Gambarkan rangkaian schematic 5 LED running yang digunakan pada percobaan!
-2. Jelaskan bagaimana program membuat efek LED berjalan dari kiri ke kanan!
-3. Jelaskan bagaimana program membuat LED kembali dari kanan ke kiri!
-4. Buatkan program agar LED menyala tiga LED kanan dan tiga LED kiri secara bergantian dan berikan penjelasan disetiap baris kode
+   ><img width="882" height="300" alt="image" src="https://github.com/user-attachments/assets/9288aa77-af91-45b9-928e-eae7aec025fb" />
+
+3. Jelaskan bagaimana program membuat efek LED berjalan dari kiri ke kanan!
+4. Jelaskan bagaimana program membuat LED kembali dari kanan ke kiri!
+5. Buatkan program agar LED menyala tiga LED kanan dan tiga LED kiri secara bergantian dan berikan penjelasan disetiap baris kode
 ---
 1. 
 2. Program memanfaatkan perulangan for mulai dari pin rendah ke tinggi, yaitu for (int ledPin = 2; ledPin < 8; ledPin++). Di dalam perulangan ini, pin LED dihidupkan dengan perintah digitalWrite(ledPin, HIGH) , ditunda sesaat sesuai variabel timer , kemudian dimatikan dengan digitalWrite(ledPin, LOW)
