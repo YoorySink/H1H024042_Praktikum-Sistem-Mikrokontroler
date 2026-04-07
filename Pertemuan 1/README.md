@@ -104,5 +104,3 @@ void loop() {
   phase++; 
 }
 ```
-
-siklus tanpa henti , sementara percabangan yang ditempatkan di dalam perulangan tersebut berfungsi menyeleksi kondisi secara instan pada setiap siklus putarannya. Hasilnya, sistem secara dinamis bisa memutuskan untuk mengubah status (misal menyalakan peringatan LED) tepat di saat terjadi perubahan pada input.
