@@ -72,11 +72,73 @@ sisi hardware maupun software?
    -Kabel Putus/Longgar: Kabel jumper dari pin Arduino ke breadboard tidak tertancap sempurna.
    -LED Putus: Segmen di dalam 7-segment tersebut memang sudah rusak.
    -Resistor Bermasalah: Jika kamu pakai resistor per segmen, mungkin resistornya rusak atau nilainya terlalu besar.
-
-Salah Pin: Kabel tertukar ke pin lain (misal harusnya ke pin 7, tapi tertancap ke pin 12).
+   -Salah Pin: Kabel tertukar ke pin lain (misal harusnya ke pin 7, tapi tertancap ke pin 12).
 4. Modifikasi rangkaian dan program dengan dua push button yang berfungsi sebagai
 penambahan (increment) dan pengurangan (decrement) pada sistem counter dan
 berikan penjelasan disetiap baris kode nya dalam bentuk README.md!
 ```
+#include <Arduino.h>
 
+const int segmentPins[8] = {7, 6, 5, 10, 11, 8, 9, 4};
+const int btnUp = 3;   // Tombol Tambah
+const int btnDown = 2; // Tombol Kurang (Baru)
+
+int counter = 0;
+bool lastUpState = HIGH;
+bool lastDownState = HIGH; // State tombol kedua
+
+byte digitPattern[16][8] = {
+   {1,1,1,1,1,1,0,0}, //0
+   {0,1,1,0,0,0,0,0}, //1
+   {1,1,0,1,1,0,1,0}, //2
+   {1,1,1,1,0,0,1,0}, //3
+   {0,1,1,0,0,1,1,0}, //4
+   {1,0,1,1,0,1,1,0}, //5 
+   {1,0,1,1,1,1,1,0}, //6
+   {1,1,1,0,0,0,0,0}, //7
+   {1,1,1,1,1,1,1,0}, //8
+   {1,1,1,1,0,1,1,0}, //9
+   {1,1,1,0,1,1,1,0}, //A
+   {0,0,1,1,1,1,1,0}, //b
+   {1,0,0,1,1,1,0,0}, //C
+   {0,1,1,1,1,0,1,0}, //d
+   {1,0,0,1,1,1,1,0}, //E
+   {1,0,0,0,1,1,1,0}  //F
+};
+
+void displayDigit(int num) {
+  for(int i=0; i<8; i++) {
+    digitalWrite(segmentPins[i], !digitPattern[num][i]);
+  }
+}
+
+void setup() {
+  for(int i=0; i<8; i++) pinMode(segmentPins[i], OUTPUT);
+  pinMode(btnUp, INPUT_PULLUP);
+  pinMode(btnDown, INPUT_PULLUP); // Setup tombol kedua
+  displayDigit(counter); 
+}
+
+void loop() {
+  bool currentUp = digitalRead(btnUp);
+  bool currentDown = digitalRead(btnDown);
+
+  // Cek Tombol Tambah
+  if (lastUpState == HIGH && currentUp == LOW) {
+    counter++;
+    if(counter > 15) counter = 0;
+    displayDigit(counter);
+    delay(200); 
+  }
+  lastUpState = currentUp;
+
+  // Cek Tombol Kurang (Logika sama, beda arah hitung)
+  if (lastDownState == HIGH && currentDown == LOW) {
+    counter--;
+    if(counter < 0) counter = 15; // Balik ke F kalau di bawah 0
+    displayDigit(counter);
+    delay(200);
+  }
+  lastDownState = currentDown;
+}
 ```
