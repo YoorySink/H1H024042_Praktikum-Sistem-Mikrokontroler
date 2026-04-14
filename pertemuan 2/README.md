@@ -76,7 +76,7 @@ sisi hardware maupun software?
 4. Modifikasi rangkaian dan program dengan dua push button yang berfungsi sebagai
 penambahan (increment) dan pengurangan (decrement) pada sistem counter dan
 berikan penjelasan disetiap baris kode nya dalam bentuk README.md!
-```
+```C
 #include <Arduino.h>
 
 const int segmentPins[8] = {7, 6, 5, 10, 11, 8, 9, 4};
