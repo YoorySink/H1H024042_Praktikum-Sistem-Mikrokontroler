@@ -59,4 +59,24 @@ void loop()
     delay(1000); //delay 1 detik tiap digit untuk tampil
   }
 }```
-   
+```
+#2.6.4 Pertanyaan Praktikum
+1. Gambarkan rangkaian schematic yang digunakan pada percobaan!
+   > coming soon
+2. Mengapa pada push button digunakan mode INPUT_PULLUP pada Arduino Uno?
+Apa keuntungannya dibandingkan rangkaian biasa?
+   >Tanpa pull-up, pin input yang tidak terhubung ke mana-mana akan "mengambang" (nilainya berubah-ubah secara acak antara 0 dan 1 karena gangguan elektromagnetik). INPUT_PULLUP memastikan sinyal tetap stabil di posisi HIGH saat sedang standby. Hemat Komponen, tidak butuh resistor eksternal (10k Ohm) di breadboard karena Arduino sudah menyediakan resistor internal.
+3. Jika salah satu LED segmen tidak menyala, apa saja kemungkinan penyebabnya dari
+sisi hardware maupun software?
+   > Sisi Hardware:
+   -Kabel Putus/Longgar: Kabel jumper dari pin Arduino ke breadboard tidak tertancap sempurna.
+   -LED Putus: Segmen di dalam 7-segment tersebut memang sudah rusak.
+   -Resistor Bermasalah: Jika kamu pakai resistor per segmen, mungkin resistornya rusak atau nilainya terlalu besar.
+
+Salah Pin: Kabel tertukar ke pin lain (misal harusnya ke pin 7, tapi tertancap ke pin 12).
+4. Modifikasi rangkaian dan program dengan dua push button yang berfungsi sebagai
+penambahan (increment) dan pengurangan (decrement) pada sistem counter dan
+berikan penjelasan disetiap baris kode nya dalam bentuk README.md!
+```
+
+```
