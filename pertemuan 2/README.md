@@ -1,6 +1,7 @@
 #2.5.4 Pertanyaan Praktikum
 1. Gambarkan rangkaian schematic yang digunakan pada percobaan!
-   >coming soon
+   ><img width="646" height="402" alt="image" src="https://github.com/user-attachments/assets/aba14205-98af-43c8-ba0d-2d92a7ccd825" />
+
 2. Apa yang terjadi jika nilai num lebih dari 15?
    >Program akan mengalami array out of bounds, yaitu mencoba mengakses memori yang tidak ada atau di luar batas. Akibatnya, Arduino akan mengambil data acak (data sampah) dari memori, sehingga tampilan pada 7-segment akan menjadi ngawur atau tidak beraturan.
 3. Apakah program ini menggunakan common cathode atau common anode? Jelaskan
@@ -9,10 +10,9 @@ alasanya!
 4. Modifikasi program agar tampilan berjalan dari F ke 0 dan berikan penjelasan disetiap
 baris kode nya dalam bentuk README.md!
 ```C
-#include <Arduino.h>
 // 7-Segment Common Anode
 // Pin mapping segment: a b c d e f g dp 
-const int segmentPins[8] = {7, 6, 5, 10, 11, 8, 9, 4};
+const int segmentPins[8] = {7, 6, 5, 11, 10, 8, 9, 4};
 
 byte digitPattern[16][8] = {
   {1,1,1,1,1,1,0,0}, //0
@@ -53,7 +53,7 @@ void setup()
 
 void loop() 
 { // Mulai dari 15 (F) hingga 0, berkurang 1 setiap iterasi
-  for(int i=15; i>=0; i-)
+  for(int i=15; i>=0; i--)
   {
     displayDigit(i); //menampilkan digit
     delay(1000); //delay 1 detik tiap digit untuk tampil
@@ -62,7 +62,8 @@ void loop()
 ```
 #2.6.4 Pertanyaan Praktikum
 1. Gambarkan rangkaian schematic yang digunakan pada percobaan!
-   > coming soon
+   > <img width="633" height="401" alt="image" src="https://github.com/user-attachments/assets/32186148-1d5c-4bf5-82b4-923a431ba3a4" />
+
 2. Mengapa pada push button digunakan mode INPUT_PULLUP pada Arduino Uno?
 Apa keuntungannya dibandingkan rangkaian biasa?
    >Tanpa pull-up, pin input yang tidak terhubung ke mana-mana akan "mengambang" (nilainya berubah-ubah secara acak antara 0 dan 1 karena gangguan elektromagnetik). INPUT_PULLUP memastikan sinyal tetap stabil di posisi HIGH saat sedang standby. Hemat Komponen, tidak butuh resistor eksternal (10k Ohm) di breadboard karena Arduino sudah menyediakan resistor internal.
@@ -77,68 +78,75 @@ sisi hardware maupun software?
 penambahan (increment) dan pengurangan (decrement) pada sistem counter dan
 berikan penjelasan disetiap baris kode nya dalam bentuk README.md!
 ```C
-#include <Arduino.h>
+const int segmentPins[8] = {7, 6, 5, 11, 10, 8, 9, 4}; // Pin 7-Segment
+const int buttonPin[2] = {3, 2}; // Pin 3 (Tambah) dan Pin 2 (Kurang)
 
-const int segmentPins[8] = {7, 6, 5, 10, 11, 8, 9, 4};
-const int btnUp = 3;   // Tombol Tambah
-const int btnDown = 2; // Tombol Kurang (Baru)
+int counter = 0; // Variabel penampung angka
+bool lastButtonState[2] = {HIGH, HIGH}; // State terakhir dari kedua button
 
-int counter = 0;
-bool lastUpState = HIGH;
-bool lastDownState = HIGH; // State tombol kedua
-
+// Pola digit 0-F
 byte digitPattern[16][8] = {
-   {1,1,1,1,1,1,0,0}, //0
-   {0,1,1,0,0,0,0,0}, //1
-   {1,1,0,1,1,0,1,0}, //2
-   {1,1,1,1,0,0,1,0}, //3
-   {0,1,1,0,0,1,1,0}, //4
-   {1,0,1,1,0,1,1,0}, //5 
-   {1,0,1,1,1,1,1,0}, //6
-   {1,1,1,0,0,0,0,0}, //7
-   {1,1,1,1,1,1,1,0}, //8
-   {1,1,1,1,0,1,1,0}, //9
-   {1,1,1,0,1,1,1,0}, //A
-   {0,0,1,1,1,1,1,0}, //b
-   {1,0,0,1,1,1,0,0}, //C
-   {0,1,1,1,1,0,1,0}, //d
-   {1,0,0,1,1,1,1,0}, //E
-   {1,0,0,0,1,1,1,0}  //F
+  {1,1,1,1,1,1,0,0}, // 0
+  {0,1,1,0,0,0,0,0}, // 1
+  {1,1,0,1,1,0,1,0}, // 2
+  {1,1,1,1,0,0,1,0}, // 3
+  {0,1,1,0,0,1,1,0}, // 4
+  {1,0,1,1,0,1,1,0}, // 5
+  {1,0,1,1,1,1,1,0}, // 6
+  {1,1,1,0,0,0,0,0}, // 7
+  {1,1,1,1,1,1,1,0}, // 8
+  {1,1,1,1,0,1,1,0}, // 9
+  {1,1,1,0,1,1,1,0}, // A
+  {0,0,1,1,1,1,1,0}, // b
+  {1,0,0,1,1,1,0,0}, // C
+  {0,1,1,1,1,0,1,0}, // d
+  {1,0,0,1,1,1,1,0}, // E
+  {1,0,0,0,1,1,1,0}  // F
 };
 
 void displayDigit(int num) {
-  for(int i=0; i<8; i++) {
-    digitalWrite(segmentPins[i], !digitPattern[num][i]);
-  }
+    for(int i = 0; i < 8; i++) {
+        digitalWrite(segmentPins[i], !digitPattern[num][i]); 
+    }
 }
 
 void setup() {
-  for(int i=0; i<8; i++) pinMode(segmentPins[i], OUTPUT);
-  pinMode(btnUp, INPUT_PULLUP);
-  pinMode(btnDown, INPUT_PULLUP); // Setup tombol kedua
-  displayDigit(counter); 
+    for(int i = 0; i < 8; i++) {
+        pinMode(segmentPins[i], OUTPUT);
+    }
+    for (int i = 0; i < 2; i++) {
+        pinMode(buttonPin[i], INPUT_PULLUP);
+    }
+    displayDigit(counter); 
 }
 
 void loop() {
-  bool currentUp = digitalRead(btnUp);
-  bool currentDown = digitalRead(btnDown);
+    for (int i = 0; i < 2; i++) { 
+        bool currentState = digitalRead(buttonPin[i]); 
 
-  // Cek Tombol Tambah
-  if (lastUpState == HIGH && currentUp == LOW) {
-    counter++;
-    if(counter > 15) counter = 0;
-    displayDigit(counter);
-    delay(200); 
-  }
-  lastUpState = currentUp;
-
-  // Cek Tombol Kurang (Logika sama, beda arah hitung)
-  if (lastDownState == HIGH && currentDown == LOW) {
-    counter--;
-    if(counter < 0) counter = 15; // Balik ke F kalau di bawah 0
-    displayDigit(counter);
-    delay(200);
-  }
-  lastDownState = currentDown;
+        if (lastButtonState[i] == HIGH && currentState == LOW) { 
+            // Jika tombol 1 ditekan (increment)
+            if (i == 0) {
+                if (counter == 15) {
+                    counter = 0;      // kalau sudah 15, kembali ke 0
+                } else {
+                    counter = counter + 1;  // tambah 1
+                }
+            }
+            // Jika tombol 2 ditekan (decrement)
+            else {
+                if (counter == 0) {
+                    counter = 15;     // kalau sudah 0, kembali ke 15
+                } else {
+                    counter = counter - 1;  // kurangi 1
+                }
+            }
+            displayDigit(counter);
+            delay(200); 
+        }
+        lastButtonState[i] = currentState; 
+    }
 }
 ```
+<img width="876" height="377" alt="image" src="https://github.com/user-attachments/assets/928aad76-4d68-4530-acec-39c481fb116a" />
+
