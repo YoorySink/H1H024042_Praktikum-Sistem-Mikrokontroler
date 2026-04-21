@@ -83,9 +83,8 @@ sistem
 ## 3.6.4 Percobaan 3B
 ### 1. Jelaskan bagaimana cara kerja komunikasi I2C antara Arduino dan LCD!
 > Pada komunikasi I2C, Arduino bertindak sebagai master dan LCD sebagai slave. Arduino mengirimkan data melalui jalur SDA dan sinyal clock melalui SCL. Setiap perangkat memiliki alamat unik, sehingga Arduino dapat mengirim data ke LCD berdasarkan alamat tersebut (misalnya 0x27).
-### 2. Apakah pin potensiometer harus seperti itu? Jelaskan yang terjadi apabila pin kiri dan
-pin kanan tertukar
-> Ya. Konfigurasi pin potensiometer harus sesuai agar menghasilkan pembacaan yang benar. Jika pin kiri dan kanan tertukar, maka arah perubahan nilai akan terbalik, tetapi masih dapat terbaca oleh Arduino.
+### 2. Apakah pin potensiometer harus seperti itu? Jelaskan yang terjadi apabila pin kiri dan pin kanan tertukar
+> boleh ditukar. Jika pin kiri dan kanan tertukar, maka arah perubahan nilai akan terbalik, tetapi masih dapat terbaca oleh Arduino.
 ### 3. Modifikasi program (gabungan UART + I2C output)
 ```C
 #include <Wire.h>
