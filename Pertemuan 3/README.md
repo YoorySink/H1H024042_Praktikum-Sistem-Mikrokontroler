@@ -161,7 +161,7 @@ void loop() {
 # Dokumentasi
 <table>
   <tr>
-    <td> <img width="1280" height="720" alt="WhatsApp Image 2026-04-15 at 11 29 15" src="https://github.com/user-attachments/assets/00bf0c3a-1c33-47a5-ae3d-019ca147aa06" />
+    <td><img width="1280" height="720" alt="WhatsApp Image 2026-04-15 at 11 58 42" src="https://github.com/user-attachments/assets/63c9b09e-48f2-4717-a0d9-cfd9606d5ca6" />
     </td>
     <td> <img width="1280" height="720" alt="WhatsApp Image 2026-04-15 at 11 29 15" src="https://github.com/user-attachments/assets/70e1915f-1e06-4aad-801f-b6df8eb94ede" />
     </td>
