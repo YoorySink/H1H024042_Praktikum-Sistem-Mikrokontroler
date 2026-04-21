@@ -1,58 +1,86 @@
-## Percobaan 3A: UART
+## 3.5.4 Percobaan 3A 
 ### 1. Jelaskan proses dari input keyboard hingga LED menyala/mati!
 > Ketika pengguna mengetik perintah pada keyboard di Serial Monitor, data dikirim ke Arduino melalui komunikasi serial (UART). Arduino kemudian membaca data tersebut menggunakan Serial.read(). Jika data yang diterima adalah '1', maka Arduino memberikan logika HIGH pada pin LED sehingga LED menyala. Jika data '0', maka diberikan logika LOW sehingga LED mati.
 ### 2. Mengapa digunakan Serial.available() sebelum membaca data? Apa yang terjadi jika baris tersebut dihilangkan?
 > Serial.available() digunakan untuk mengecek apakah ada data yang tersedia di buffer serial sebelum dibaca. Jika fungsi ini dihilangkan, Arduino tetap mencoba membaca data meskipun tidak ada data yang masuk, sehingga dapat menghasilkan pembacaan data yang tidak valid atau error.
-### 3. Modifikasi program agar LED berkedip (blink) ketika menerima input '2' dengan kondisi
-jika ‘2’ aktif maka LED akan terus berkedip sampai perintah selanjutnya diberikan dan
-berikan penjelasan disetiap baris kode nya
+### 3. Modifikasi program agar LED berkedip (blink) ketika menerima input '2' dengan kondisi jika ‘2’ aktif maka LED akan terus berkedip sampai perintah selanjutnya diberikan dan berikan penjelasan disetiap baris kode nya
 ```C
-#include <Arduino.h>        // Library utama Arduino
+#include <Arduino.h>
 
-const int PIN_LED = 12;     // Menentukan pin LED di pin 12
-bool blinkMode = false;     // Variabel untuk menyimpan mode blink (true/false)
+const int PIN_LED = 12; // Pin LED terhubung ke pin digital 12
+
+// Variabel untuk sistem blink (millis)
+unsigned long prevMillis = 0;   // Menyimpan waktu terakhir LED berubah
+const long interval = 500;      // Interval kedip LED (500 ms = 0.5 detik)
+
+// Variabel state
+int isBlink = 0;   // 0 = tidak blink, 1 = blink aktif
+int ledState = 0;  // Status LED (0 = mati, 1 = nyala)
 
 void setup() {
-  Serial.begin(9600);      // Memulai komunikasi serial dengan baud rate 9600
-  Serial.println("Ketik '1' ON, '0' OFF, '2' BLINK"); // Instruksi ke user
-  pinMode(PIN_LED, OUTPUT); // Mengatur pin LED sebagai output
+  Serial.begin(9600); 
+  // Memulai komunikasi serial dengan baud rate 9600
+  // Artinya kecepatan kirim data antara Arduino dan komputer = 9600 bit/detik
+
+  Serial.println("Ketik '1' ON, '2' BLINK, '0' OFF"); 
+  // Menampilkan instruksi ke Serial Monitor
+
+  pinMode(PIN_LED, OUTPUT); 
+  // Mengatur pin LED sebagai OUTPUT agar bisa mengontrol nyala/mati LED
 }
 
 void loop() {
-  // Mengecek apakah ada data yang masuk dari Serial Monitor
+  // Mengecek apakah ada data yang dikirim dari Serial Monitor
   if (Serial.available() > 0) {
-    char data = Serial.read(); // Membaca data 1 karakter dari serial
 
-    if (data == '1') {         // Jika input '1'
-      blinkMode = false;       // Matikan mode blink
+    char input = Serial.read();  
+    // Membaca 1 karakter dari input (misalnya '1', '0', atau '2')
+
+    // Jika input '1' → LED menyala
+    if (input == '1') {
+      isBlink = 0; // Matikan mode blink
       digitalWrite(PIN_LED, HIGH); // Nyalakan LED
-      Serial.println("LED ON");    // Tampilkan status
-    } 
-    else if (data == '0') {    // Jika input '0'
-      blinkMode = false;       
-      digitalWrite(PIN_LED, LOW);  // Matikan LED
-      Serial.println("LED OFF");
-    } 
-    else if (data == '2') {    // Jika input '2'
-      blinkMode = true;        // Aktifkan mode blink
-      Serial.println("LED BLINK");
+      Serial.println("LED ON"); // Feedback ke user
+    }
+
+    // Jika input '0' → LED mati
+    else if (input == '0') {
+      isBlink = 0; // Matikan mode blink
+      digitalWrite(PIN_LED, LOW); // Matikan LED
+      Serial.println("LED OFF"); // Feedback ke user
+    }
+
+    // Jika input '2' → LED berkedip terus
+    else if (input == '2') {
+      isBlink = 1; // Aktifkan mode blink
+      Serial.println("LED BLINK"); // Feedback ke user
+    }
+
+    // Jika input selain 1, 0, 2 (dan bukan enter)
+    else if (input != '\n' && input != '\r') {
+      Serial.println("Perintah tidak dikenali");
     }
   }
-
-  // Jika mode blink aktif
-  if (blinkMode) {
-    digitalWrite(PIN_LED, HIGH); // LED nyala
-    delay(500);                  // Tunggu 500 ms
-    digitalWrite(PIN_LED, LOW);  // LED mati
-    delay(500);                  // Tunggu 500 ms
+  if (isBlink == 1) { // Jalankan hanya jika mode blink aktif
+    unsigned long currentMillis = millis(); 
+    // Mengambil waktu sekarang sejak Arduino dinyalakan (dalam milidetik)
+    // Cek apakah selisih waktu sudah mencapai interval (500 ms)
+    if (currentMillis - prevMillis >= interval) {
+      prevMillis = currentMillis; 
+      // Simpan waktu sekarang sebagai acuan untuk perhitungan berikutnya
+      ledState = !ledState; 
+      // Membalik status LED (0 jadi 1, 1 jadi 0)
+      digitalWrite(PIN_LED, ledState); 
+      // Mengatur LED sesuai state (nyala/mati bergantian)
+    }
   }
 }
 ```
 ### 4. Tentukan apakah menggunakan delay() atau milis()! Jelaskan pengaruhnya terhadap
 sistem
-> Pada program ini digunakan delay() karena lebih sederhana untuk membuat efek kedip. Namun, delay() bersifat blocking sehingga Arduino tidak dapat melakukan proses lain selama delay berlangsung. Jika menggunakan millis(), program menjadi non-blocking sehingga lebih efisien dan dapat menangani banyak proses sekaligus.
+> Pada program ini digunakan fungsi millis() untuk mengatur waktu kedipan LED. Fungsi millis() memungkinkan pembuatan delay secara non-blocking atau interupt sehingga Arduino tetap dapat menjalankan proses lain seperti membaca input dari Serial Monitor saat LED sedang berkedip.
 
-## Percobaan 3B: I2C
+## 3.6.4 Percobaan 3B
 ### 1. Jelaskan bagaimana cara kerja komunikasi I2C antara Arduino dan LCD!
 > Pada komunikasi I2C, Arduino bertindak sebagai master dan LCD sebagai slave. Arduino mengirimkan data melalui jalur SDA dan sinyal clock melalui SCL. Setiap perangkat memiliki alamat unik, sehingga Arduino dapat mengirim data ke LCD berdasarkan alamat tersebut (misalnya 0x27).
 ### 2. Apakah pin potensiometer harus seperti itu? Jelaskan yang terjadi apabila pin kiri dan
@@ -112,10 +140,20 @@ void loop() {
 ```
 
 # Dokumentasi
-<img width="500" height="500" alt="WhatsApp Image 2026-04-15 at 11 58 42" src="https://github.com/user-attachments/assets/80221040-72ba-4647-a93a-d0e70a0eab4f" />
-<img width="500" height="500" alt="WhatsApp Image 2026-04-15 at 11 29 15" src="https://github.com/user-attachments/assets/1b1033db-eb63-4f95-863e-4d4aa22565b2" />
-<img width="567" height="320" alt="WhatsAppVideo2026-04-15at11 58 42-ezgif com-video-to-gif-converter" src="https://github.com/user-attachments/assets/bf1aaa04-9357-4008-867e-871fbf37afc8" />
-<img width="500" height="500" alt="WhatsAppVideo2026-04-15at11 29 20-ezgif com-video-to-gif-converter (1)" src="https://github.com/user-attachments/assets/797e3cca-73fe-4078-80c4-1022c5ac0b1c" />
+<table>
+  <tr>
+    <td> <img width="1280" height="720" alt="WhatsApp Image 2026-04-15 at 11 29 15" src="https://github.com/user-attachments/assets/00bf0c3a-1c33-47a5-ae3d-019ca147aa06" />
+    </td>
+    <td> <img width="1280" height="720" alt="WhatsApp Image 2026-04-15 at 11 29 15" src="https://github.com/user-attachments/assets/70e1915f-1e06-4aad-801f-b6df8eb94ede" />
+    </td>
+  </tr>
+  <tr>
+    <td><img width="567" height="320" alt="WhatsAppVideo2026-04-15at11 58 42-ezgif com-video-to-gif-converter" src="https://github.com/user-attachments/assets/7fdb38af-d09e-42a5-ab5f-34c843ac4c6e" />
+    </td>
+    <td><img width="567" height="320" alt="WhatsAppVideo2026-04-15at11 29 20-ezgif com-video-to-gif-converter (1)" src="https://github.com/user-attachments/assets/0ed1e52f-199e-456c-8e29-648b07fec55a" />
+    </td>
+  </tr>
+</table>
 
 
 
