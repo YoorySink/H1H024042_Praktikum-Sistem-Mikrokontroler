@@ -40,20 +40,20 @@ void loop() {
     if (input == '1') {
       isBlink = 0; // Matikan mode blink
       digitalWrite(PIN_LED, HIGH); // Nyalakan LED
-      Serial.println("LED ON"); // Feedback ke user
+      Serial.println("LED ON"); 
     }
 
     // Jika input '0' → LED mati
     else if (input == '0') {
       isBlink = 0; // Matikan mode blink
       digitalWrite(PIN_LED, LOW); // Matikan LED
-      Serial.println("LED OFF"); // Feedback ke user
+      Serial.println("LED OFF"); 
     }
 
     // Jika input '2' → LED berkedip terus
     else if (input == '2') {
       isBlink = 1; // Aktifkan mode blink
-      Serial.println("LED BLINK"); // Feedback ke user
+      Serial.println("LED BLINK");
     }
 
     // Jika input selain 1, 0, 2 (dan bukan enter)
@@ -88,56 +88,76 @@ pin kanan tertukar
 > Ya. Konfigurasi pin potensiometer harus sesuai agar menghasilkan pembacaan yang benar. Jika pin kiri dan kanan tertukar, maka arah perubahan nilai akan terbalik, tetapi masih dapat terbaca oleh Arduino.
 ### 3. Modifikasi program (gabungan UART + I2C output)
 ```C
-#include <Wire.h>                // Library komunikasi I2C
-#include <LiquidCrystal_I2C.h>   // Library LCD I2C
-#include <Arduino.h>             // Library utama Arduino
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+// ganti alamat jika perlu (0x27 / 0x20)
+// Inisialisasi LCD alamat 0x27 ukuran 16 kolom 2 baris
+LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-LiquidCrystal_I2C lcd(0x27, 16, 2); // Inisialisasi LCD (alamat 0x27, 16x2)
-
-const int pinPot = A0;           // Pin analog untuk potensiometer
+// Pin input potensiometer
+const int pinPot = A0;
 
 void setup() {
-  Serial.begin(9600);           // Memulai komunikasi serial
-  lcd.init();                   // Inisialisasi LCD
-  lcd.backlight();              // Mengaktifkan lampu latar LCD
+  Serial.begin(9600);   // Mulai komunikasi serial (UART)
+
+  lcd.init();           // Inisialisasi LCD
+  lcd.backlight();      // Nyalakan lampu LCD
 }
 
 void loop() {
-  int nilai = analogRead(pinPot); // Membaca nilai analog (0-1023)
+  int nilai = analogRead(pinPot);  // Baca nilai ADC (0–1023)
 
-  float volt = nilai * (5.0 / 1023.0); // Konversi ke tegangan (Volt)
-  int persen = map(nilai, 0, 1023, 0, 100); // Konversi ke persen (0-100%)
+  int persen = (float)nilai / 1023 * 100;   // Konversi ke persen (0–100%)
+  float volt = nilai * (5.0 / 1023.0);      // Konversi ke tegangan (0–5V)
 
-  // Menampilkan data ke Serial Monitor (UART)
+  // Mapping ke bar (0-16)
+  int panjangBar = map(nilai, 0, 1023, 0, 16); // Mapping ke panjang bar LCD
+
+  // OUTPUT KE SERIAL
   Serial.print("ADC: ");
   Serial.print(nilai);
-  Serial.print(" Volt: ");
-  Serial.print(volt);
-  Serial.print(" V Persen: ");
+  Serial.print("\tVolt: ");
+  Serial.print(volt, 2); // tampilkan 2 angka desimal
+  Serial.print(" V");
+  Serial.print("\tPersen: ");
   Serial.print(persen);
   Serial.println("%");
 
-  // Menampilkan data ke LCD baris pertama
-  lcd.setCursor(0, 0);          // Set posisi kolom 0, baris 0
+  // OUTPUT KE LCD 
+  lcd.clear(); // Bersihkan layar sebelum update
+
+  // Baris 1: Nilai adc dan persenannya
+  lcd.setCursor(0, 0);
   lcd.print("ADC:");
-  lcd.print(nilai);             
-  lcd.print("   ");             // Menghapus sisa karakter lama
+  lcd.print(nilai);
+  lcd.print("  "); //clear sisa
 
-  // Membuat progress bar di baris kedua
-  lcd.setCursor(0, 1);          // Pindah ke baris kedua
-  int panjangBar = map(nilai, 0, 1023, 0, 16); // Mapping ke panjang bar
+  lcd.setCursor(10, 0);
+  lcd.print(persen);
+  lcd.print("%");
 
-  for (int i = 0; i < 16; i++) { // Loop sepanjang 16 kolom LCD
+  // Baris 2: bar
+  // pengulangan untuk membuat bar
+  lcd.setCursor(0, 1);
+  for (int i = 0; i < 16; i++) {
     if (i < panjangBar) {
-      lcd.print((char)255);     // Karakter blok penuh
+      lcd.print((char)255);
     } else {
-      lcd.print(" ");           // Kosong
+      lcd.print(" ");
     }
   }
 
-  delay(200);                   // Delay agar tampilan stabil
+  delay(300); // Delay agar tampilan tidak terlalu cepat (lebih stabil)
 }
 ```
+### 4. Lengkapi table berikut berdasarkan pengamatan pada Serial Monitor
+| ADC | Volt (V) | Persen (%) |
+| :---: | :---: | :---: |
+| 1 | 0.00 | 0% |
+| 21 | 0.10 | 2% |
+| 49 | 0.23 | 4% |
+| 74 | 0.35 | 7% |
+| 96 | 0.46 | 9% |
 
 # Dokumentasi
 <table>
