@@ -59,7 +59,7 @@ sistem
 pin kanan tertukar
 > Ya. Konfigurasi pin potensiometer harus sesuai agar menghasilkan pembacaan yang benar. Jika pin kiri dan kanan tertukar, maka arah perubahan nilai akan terbalik, tetapi masih dapat terbaca oleh Arduino.
 ### 3. Modifikasi program (gabungan UART + I2C output)
-```
+```C
 #include <Wire.h>                // Library komunikasi I2C
 #include <LiquidCrystal_I2C.h>   // Library LCD I2C
 #include <Arduino.h>             // Library utama Arduino
@@ -111,6 +111,11 @@ void loop() {
 }
 ```
 
-#Dokumentasi
+# Dokumentasi
+<img width="500" height="500" alt="WhatsApp Image 2026-04-15 at 11 58 42" src="https://github.com/user-attachments/assets/80221040-72ba-4647-a93a-d0e70a0eab4f" />
+<img width="500" height="500" alt="WhatsApp Image 2026-04-15 at 11 29 15" src="https://github.com/user-attachments/assets/1b1033db-eb63-4f95-863e-4d4aa22565b2" />
+<img width="567" height="320" alt="WhatsAppVideo2026-04-15at11 58 42-ezgif com-video-to-gif-converter" src="https://github.com/user-attachments/assets/bf1aaa04-9357-4008-867e-871fbf37afc8" />
+<img width="500" height="500" alt="WhatsAppVideo2026-04-15at11 29 20-ezgif com-video-to-gif-converter (1)" src="https://github.com/user-attachments/assets/797e3cca-73fe-4078-80c4-1022c5ac0b1c" />
+
 
 
