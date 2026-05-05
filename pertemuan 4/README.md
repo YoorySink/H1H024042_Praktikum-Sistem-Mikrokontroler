@@ -66,11 +66,11 @@ void loop() {
 ```
 
 # Percobaan 2(4B): Pulse Width Modulation (PWM)
-### Jelaskan mengapa LED dapat diatur kecerahannya menggunakan fungsi analogWrite()!
+### 1. Jelaskan mengapa LED dapat diatur kecerahannya menggunakan fungsi analogWrite()!
 > LED dapat diatur kecerahannya menggunakan fungsi analogWrite() karena Arduino menghasilkan sinyal PWM (Pulse Width Modulation), yaitu sinyal digital yang dinyalakan dan dimatikan dengan cepat. Kecerahan LED ditentukan oleh duty cycle, yaitu perbandingan lama waktu sinyal HIGH terhadap satu periode. Semakin besar nilai PWM, semakin lama sinyal berada pada kondisi HIGH sehingga tegangan rata-rata yang diterima LED meningkat dan LED terlihat lebih terang.
-### Apa hubungan antara nilai ADC (0–1023) dan nilai PWM (0–255)?
+### 2. Apa hubungan antara nilai ADC (0–1023) dan nilai PWM (0–255)?
 > Nilai ADC memiliki rentang 0–1023 karena menggunakan resolusi 10-bit, sedangkan PWM memiliki rentang 0–255 karena menggunakan resolusi 8-bit. Oleh karena itu, diperlukan proses scaling (menggunakan fungsi map()) untuk menyesuaikan nilai ADC agar dapat digunakan sebagai nilai PWM.
-### Modifikasilah program berikut agar LED hanya menyala pada rentang kecerahan sedang, yaitu hanya ketika nilai PWM berada pada rentang 50 sampai 200. Jelaskan program pada file README.md.
+### 3. Modifikasilah program berikut agar LED hanya menyala pada rentang kecerahan sedang, yaitu hanya ketika nilai PWM berada pada rentang 50 sampai 200. Jelaskan program pada file README.md.
 >
 ```C
   pwm = map(nilaiADC,
