@@ -168,6 +168,6 @@ void display_data(void *pvParameters) {
 </p>
 
 <p align="center">
-  <img wwidth="250px" alt="dokumentasi percobaan5B" src="https://github.com/user-attachments/assets/b9195ee6-c003-4e3c-80b4-c779f695b597" />
+  <img wwidth="45%" alt="dokumentasi percobaan5B" src="https://github.com/user-attachments/assets/b9195ee6-c003-4e3c-80b4-c779f695b597" />
   <img width="45%" alt="dokumentasivideopercobaan5B-ezgif com-video-to-gif-converter" src="https://github.com/user-attachments/assets/53f8f8ff-ec13-48a4-8478-d6d09e61e639" />
 </p>
