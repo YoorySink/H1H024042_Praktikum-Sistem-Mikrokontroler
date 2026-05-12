@@ -23,7 +23,7 @@ xTaskCreate(
   NULL );
 ```
 ### 3. Modifikasilah program dengan menambah sensor (misalnya potensiometer), lalu gunakan nilainya untuk mengontrol kecepatan LED! Bagaimana hasilnya? Jelaskan program pada file README.md.
-> ```C
+```C
 #include <Arduino_FreeRTOS.h>
 
 void TaskBlink1(void *pvParameters);
@@ -142,7 +142,70 @@ void TaskPot(void *pvParameters)
 ### 2. Apakah program ini berpotensi mengalami race condition? Jelaskan!
 > Program memiliki kemungkinan race condition yang sangat kecil karena komunikasi data menggunakan queue FreeRTOS. Fungsi xQueueSend() digunakan oleh task read_data untuk mengirim data ke queue, sedangkan xQueueReceive() digunakan oleh task display untuk menerima data dari queue. Queue FreeRTOS sudah memiliki mekanisme pengaturan akses data sehingga data yang dikirim akan disalin terlebih dahulu sebelum diterima task lain, sehingga pertukaran data antar task menjadi lebih aman dan teratur.
 ### 3. Modifikasilah program dengan menggunakan sensor DHT sesungguhnya sehingga informasi yang ditampilkan dinamis. Bagaimana hasilnya? Jelaskan program pada file README.md
->
+```C
+#include <Arduino_FreeRTOS.h>
+#include <queue.h>
+#include <DHT.h>
+
+#define DHTPIN 2
+#define DHTTYPE DHT11
+
+DHT dht(DHTPIN, DHTTYPE);
+
+struct readings {
+  float temp;
+  float hum;
+};
+
+QueueHandle_t my_queue;
+
+void read_data(void *pvParameters);
+void display_data(void *pvParameters);
+
+void setup() {
+  Serial.begin(9600);
+
+  dht.begin();
+
+  my_queue = xQueueCreate(5, sizeof(struct readings));
+
+  xTaskCreate(read_data, "read", 128, NULL, 1, NULL);
+  xTaskCreate(display_data, "display", 128, NULL, 1, NULL);
+}
+
+void loop() {
+}
+
+void read_data(void *pvParameters) {
+  struct readings data;
+
+  while(1) {
+    data.temp = dht.readTemperature();
+    data.hum = dht.readHumidity();
+
+    xQueueSend(my_queue, &data, portMAX_DELAY);
+
+    vTaskDelay(2000 / portTICK_PERIOD_MS);
+  }
+}
+
+void display_data(void *pvParameters) {
+  struct readings data;
+
+  while(1) {
+    if(xQueueReceive(my_queue, &data, portMAX_DELAY) == pdPASS) {
+
+      Serial.print("Suhu : ");
+      Serial.print(data.temp);
+      Serial.println(" C");
+
+      Serial.print("Kelembaban : ");
+      Serial.print(data.hum);
+      Serial.println(" %");
+    }
+  }
+}
+```
 
 # Dokumentasi
 <p align="center">
