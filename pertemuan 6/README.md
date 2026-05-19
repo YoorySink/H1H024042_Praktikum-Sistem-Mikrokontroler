@@ -119,6 +119,6 @@ void loop() {
  <img width="45%" alt="dokumentasi perocbaan6B" src="https://github.com/user-attachments/assets/5f4a8c72-754d-4417-a775-aade10444955" />
 </p>
 <p align="center">
-<img wwidth="45%" alt="dokumentasi video percobaan6A" src="https://github.com/user-attachments/assets/c3498e4e-19a3-4afc-9c17-9aa303924b91" />
-<img wwidth="45%" alt="dokumentasi video percobaan6B" src="https://github.com/user-attachments/assets/6a7421ba-d8cc-429d-9aed-56ebab2a2085" />
+<img wwidth="90%" alt="dokumentasi video percobaan6A" src="https://github.com/user-attachments/assets/c3498e4e-19a3-4afc-9c17-9aa303924b91" />
+<img wwidth="90%" alt="dokumentasi video percobaan6B" src="https://github.com/user-attachments/assets/6a7421ba-d8cc-429d-9aed-56ebab2a2085" />
 </p>
